@@ -1,0 +1,25 @@
+<div id="top" class="span-24">
+  <h2>Top 25 entries</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Show?</th>
+        <th>Name</th>
+        <th>Author</th>
+        <th>Distance</th>
+        <th>Route</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% Entry.in_distance_order.all(:limit => 25).each_with_index do |e, i| %>
+        <tr class="<%= cycle("darker", "") %>">
+          <td style="background-color: #<%= hsv_to_rgbhex(((360 / 25.0) * i), 0.8, 1.0) %>"><%= check_box("route_#{e.id}", :sel, { :selected => e == @entry, :class => "routebox" }, e.id ) %></td>
+          <td><%= h e.name %></td>
+          <td><%= h e.author %></td>
+          <td><%= h e.distance %></td>
+          <td><%= h e.nodes.map { |n| n.titlecase }.join(", ") %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

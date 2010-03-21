@@ -1,0 +1,46 @@
+* {
+  font-family: arial;
+}
+
+label {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+input {
+  font-size: 12px;
+}
+
+#map {
+  width: 100%;
+  height: 500px;
+  margin-top: 20px;
+  clear: both;
+}
+
+.entry {
+  float: right;
+  width: auto;
+  margin-right: 0px;
+}
+
+#errorExplanation h2, abbr[title="required"] {
+  color: #a00;
+}
+
+#top {
+  margin-top: 20px;
+}
+
+thead th {
+  padding: 5px 20px 5px 20px;
+  font-size: 18px;
+}
+
+tbody td {
+  padding-left: 20px;
+}
+
+.darker {
+  background-color: #f0f0f0;
+}

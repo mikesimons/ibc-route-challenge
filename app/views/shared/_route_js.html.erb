@@ -1,0 +1,7 @@
+<script type="text/javascript">
+var routes = [];
+<% Entry.in_distance_order.all(:limit => 25).each_with_index do |e, i| %>
+  var points = [<%= e.nodes.map { |ex| "new google.maps.LatLng(locations['#{ex.strip}']['lat'], locations['#{ex.strip}']['lon'])" }.join(",") %>];
+  routes[<%= e.id %>] = new google.maps.Polyline({path: points, strokeColor: "#<%= hsv_to_rgbhex(((360 / 30.0) * i) + 2.5, 0.8, 1.0) %>", strokeOpacity: 1.0, strokeWeight: 2 });
+<% end %>
+</script>

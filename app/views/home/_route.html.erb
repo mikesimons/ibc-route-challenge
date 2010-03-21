@@ -1,0 +1,6 @@
+<script type="text/javascript">
+  jQuery(document).ready(function() {
+    routes[<%= @entry.id %>].setMap(map);
+    $("#route_<%= @entry.id %>_sel")[0].checked = true;
+  });
+</script>
