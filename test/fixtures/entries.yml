@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  entry: MyText
+  distance: 1
+  author: MyString
+  name: MyString
+
+two:
+  entry: MyText
+  distance: 1
+  author: MyString
+  name: MyString
