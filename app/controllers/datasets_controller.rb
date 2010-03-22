@@ -24,7 +24,7 @@ class DatasetsController < ApplicationController
     respond_to do |format|
       format.html
       format.js
-      format.csv { send_data "#{'"Landmark","Longitude","Latitude"'}\n#{@dataset.data}", :type => 'text/csv; charset=iso-8859-1; header=present', :disposition => "attachment; filename=dataset-#{@dataset.id}.csv" }
+      format.csv { send_data "#{'"Landmark","Latitude","Longitude"'}\n#{@dataset.data}", :type => 'text/csv; charset=iso-8859-1; header=present', :disposition => "attachment; filename=dataset-#{@dataset.id}.csv" }
     end
   end
 end
