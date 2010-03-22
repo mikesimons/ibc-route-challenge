@@ -6,7 +6,14 @@ class Entry < ActiveRecord::Base
   before_save :calculate_distance
 
   named_scope :in_distance_order, :order => "distance asc"
-  named_scope :shortest, :conditions => "distance = (SELECT MIN(distance) FROM entries LIMIT 1)", :limit => 1
+  named_scope :shortest_for_dataset, lambda { |d|
+    d = d.id if d.is_a? Dataset
+    {
+      :conditions => ["dataset_id = ? and distance = (SELECT MIN(distance) FROM entries where dataset_id = ? LIMIT 1)", d, d],
+      :limit => 1
+    }
+  }
+
   named_scope :for_dataset, lambda { |d| d = d.id if d.is_a? Dataset; { :conditions => ["dataset_id = ?", d] } }
 
   def nodes

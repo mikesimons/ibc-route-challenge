@@ -1,6 +1,6 @@
 <% if @dataset and @dataset.entries.count > 0 %>
 <div class="span-24">
-  <% shortest = Entry.shortest.for_dataset(@dataset).first %>
+  <% shortest = Entry.shortest_for_dataset(@dataset).first %>
   <h2>Current shortest route: <%= shortest.distance %> km</h2>
 </div>
 <% end %>

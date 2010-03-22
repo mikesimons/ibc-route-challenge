@@ -15,7 +15,7 @@
           <td><%= link_to d.name, dataset_path(d) %></td>
           <td><%= d.data_as_array.length %></td>
           <td><%= d.entries.count %></td>
-          <td><%= d.entries.count > 0 ? "#{Entry.shortest.for_dataset(d).first.distance} km" : "n/a" %></td>
+          <td><%= d.entries.count > 0 ? "#{Entry.shortest_for_dataset(d).first.distance} km" : "n/a" %></td>
           <td><%= (d.open? ? "Yep" : "Nope") %></td>
         </tr>
       <% end %>

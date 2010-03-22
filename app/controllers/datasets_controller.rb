@@ -19,7 +19,7 @@ class DatasetsController < ApplicationController
   def show
     params[:id] = Dataset.first if params[:id].nil?
     @dataset = Dataset.find(params[:id])
-    @entry = Entry.shortest.for_dataset(@dataset).first if @dataset.open? and @dataset.entries.count > 0
+    @entry = Entry.shortest_for_dataset(@dataset).first if @dataset.open? and @dataset.entries.count > 0
 
     respond_to do |format|
       format.html
