@@ -19,5 +19,12 @@ class DatasetsController < ApplicationController
   def show
     params[:id] = Dataset.first if params[:id].nil?
     @dataset = Dataset.find(params[:id])
+    @entry = Entry.shortest.for_dataset(@dataset).first if @dataset.open? and @dataset.entries.count > 0
+
+    respond_to do |format|
+      format.html
+      format.js
+      format.csv { send_data "#{'"Landmark","Longitude","Latitude"'}\n#{@dataset.data}", :type => 'text/csv; charset=iso-8859-1; header=present', :disposition => "attachment; filename=dataset-#{@dataset.id}.csv" }
+    end
   end
 end

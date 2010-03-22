@@ -2,7 +2,7 @@ class Entry < ActiveRecord::Base
   belongs_to :dataset
 
   validates_presence_of :name, :entry
-  validate :dataset_exists, :entry_is_ok, :all_nodes_present
+  validate :dataset_exists, :entry_is_ok, :all_nodes_present, :first_and_last_are_valid
   before_save :calculate_distance
 
   named_scope :in_distance_order, :order => "distance asc"
@@ -20,6 +20,7 @@ class Entry < ActiveRecord::Base
       dsn.delete n
     end
     errors.add :entry, "is missing some nodes ('#{dsn.keys.sort.join("', '")}')" if dsn.length > 0
+    return errors.length == 0
   end
 
   def entry_is_ok
@@ -27,6 +28,13 @@ class Entry < ActiveRecord::Base
     nodes.each do |n|
       errors.add :entry, "'#{n}' is not a valid node" unless dsn[n]
     end
+    return errors.length == 0
+  end
+
+  def first_and_last_are_valid
+    dsn = self.dataset.data_as_array
+    errors.add :entry, "must start at '#{dsn.first[0]}'" if nodes.first.downcase != dsn.first[0].downcase
+    errors.add :entry, "must end at '#{dsn.last[0]}'" if nodes.last.downcase != dsn.last[0].downcase
     return errors.length == 0
   end
 

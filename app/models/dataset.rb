@@ -18,7 +18,7 @@ class Dataset < ActiveRecord::Base
   def data_as_hash
     nodes = {}
     FasterCSV.parse(self.data).each do |r|
-      nodes[r[0].downcase] = { :lat => r[0].to_f, :lon => r[1].to_f }
+      nodes[r[0].downcase] = { :lat => r[1].to_f, :lon => r[2].to_f }
     end
     nodes
   end
