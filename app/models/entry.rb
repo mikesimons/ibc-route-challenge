@@ -3,6 +3,7 @@ class Entry < ActiveRecord::Base
 
   validates_presence_of :name, :entry
   validate :dataset_exists, :entry_is_ok, :all_nodes_present, :first_and_last_are_valid
+  before_validation :prepend_start_append_end
   before_save :calculate_distance
 
   named_scope :in_distance_order, :order => "distance asc"
@@ -22,10 +23,7 @@ class Entry < ActiveRecord::Base
 
   def all_nodes_present
     dsn = self.dataset.data_as_hash
-    present_nodes = nodes
-    nodes.each do |n|
-      dsn.delete n
-    end
+    nodes.each { |n| dsn.delete n }
     errors.add :entry, "is missing some nodes ('#{dsn.keys.sort.join("', '")}')" if dsn.length > 0
     return errors.length == 0
   end
@@ -49,6 +47,12 @@ class Entry < ActiveRecord::Base
     errors.add_to_base "Invalid dataset!" if self.dataset.nil?
   end
 
+  def prepend_start_append_end
+    dsn = self.dataset.data_as_array
+    self.entry = "#{dsn.first[0]}\n#{self.entry}" if self.nodes.first != dsn.first[0]
+    self.entry += "\n#{dsn.last[0]}" if self.nodes.last != dsn.last[0]
+  end
+
   def calculate_distance
     dsn = self.dataset.data_as_hash
     prev = nil
@@ -58,18 +62,26 @@ class Entry < ActiveRecord::Base
         prev = dsn[n]
         next
       end
-      d += gcd(prev, dsn[n])
+      d += haversine(prev, dsn[n])
       prev = dsn[n]
     end
     self.distance = d
   end
 
-  def gcd(p1, p2)
+  def haversine(p1, p2)
     rlat1 = deg2rad p1[:lat]; rlon1 = deg2rad p1[:lon]; rlat2 = deg2rad p2[:lat]; rlon2 = deg2rad p2[:lon]
-    return 6372.797 * Math.acos(Math.sin(rlat1) * Math.sin(rlat2) +  Math.cos(rlat1) * Math.cos(rlat2) * Math.cos(rlon1 - rlon2))
+
+    hdlat = (rlat2 - rlat1) * 0.5
+    hdlon = (rlon2 - rlon1) * 0.5
+
+    a = Math.sin(hdlat) ** 2 + Math.cos(rlat1) * Math.cos(rlat2) * Math.sin(hdlon) ** 2
+    c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+
+    return 6372.797 * c
   end
 
   DEGREES_PER_RAD = Math::PI / 180
+
   def deg2rad(d)
     d * DEGREES_PER_RAD
   end
