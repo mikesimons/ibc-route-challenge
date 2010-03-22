@@ -10,7 +10,7 @@ class EntriesController < ApplicationController
     @entry = @dataset.entries.new(params[:entry])
 
     if @entry.save
-      redirect_to entry_path(@entry)
+      redirect_to dataset_entry_path(@dataset, @entry)
     else
       render :action => :new
     end

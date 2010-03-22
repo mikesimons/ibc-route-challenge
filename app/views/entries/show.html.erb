@@ -1,0 +1,5 @@
+<%= render :partial => "shared/top25" %>
+<%= render :partial => "shared/shortest" %>
+<%= render :partial => "shared/map" %>
+<%= render :partial => "shared/route" if @dataset.open? %>
+<%= render :partial => "shared/route_js" if @dataset.open? %>
