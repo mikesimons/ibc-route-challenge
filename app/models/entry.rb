@@ -1,50 +1,50 @@
 class Entry < ActiveRecord::Base
-  validates_presence_of :name, :author, :entry
-  validate :entry_is_ok
+  belongs_to :dataset
+
+  validates_presence_of :name, :entry
+  validate :dataset_exists, :entry_is_ok, :all_nodes_present
   before_save :calculate_distance
 
   named_scope :in_distance_order, :order => "distance asc"
-
-  NODES = {
-    "ibuildings london" => { :lat => 51.58701, :lon => -0.23029 }, 
-    "area 51" => { :lat => 37.24348, :lon => -115.81143 },
-    "eiffeltower" => { :lat => 48.85820, :lon => 2.29436 },
-    "golden gate bridge" => { :lat => 37.81877, :lon => -122.47841 },
-    "mount everest" => { :lat => 27.98002,:lon => 86.92154 },
-    "big ben" => { :lat => 51.50070, :lon => -0.12426 },
-    "zendcon" => { :lat => 37.32973, :lon => -121.88883 },
-    "harbour, tokyo" => { :lat => 35.58333, :lon => 139.75000 },
-    "taj mahal" => { :lat => 27.17486, :lon  => 78.04238 },
-    "elephpant heaven" => { :lat => 52.37342, :lon => 4.89806 },
-    "sydney opera" => { :lat => -33.85680, :lon => 151.21513 },
-    "dutch php conference" => { :lat => 52.34139, :lon => 4.88833 }
-  }
-
-  def self.shortest
-    Entry.all(:conditions => "distance = (SELECT MIN(distance) FROM entries LIMIT 1)", :limit => 1).first
-  end
+  named_scope :shortest, :conditions => "distance = (SELECT MIN(distance) FROM entries LIMIT 1)", :limit => 1
+  named_scope :for_dataset, lambda { |d| d = d.id if d.is_a? Dataset; { :conditions => ["dataset_id = ?", d] } }
 
   def nodes
-    (["ibuildings london"] + entry.downcase.gsub(/\r/, "\n").gsub(/\n+/, "\n").split("\n").to_a + ["dutch php conference"]).uniq
+    (entry.downcase.gsub(/\r/, "\n").gsub(/\n+/, "\n").split("\n").to_a).uniq
+  end
+
+  def all_nodes_present
+    dsn = self.dataset.data_as_hash
+    present_nodes = nodes
+    nodes.each do |n|
+      dsn.delete n
+    end
+    errors.add :entry, "is missing some nodes ('#{dsn.keys.sort.join("', '")}')" if dsn.length > 0
   end
 
   def entry_is_ok
+    dsn = self.dataset.data_as_hash
     nodes.each do |n|
-      errors.add :entry, "'#{n}' is not a valid node" unless NODES[n]
+      errors.add :entry, "'#{n}' is not a valid node" unless dsn[n]
     end
     return errors.length == 0
   end
 
+  def dataset_exists
+    errors.add_to_base "Invalid dataset!" if self.dataset.nil?
+  end
+
   def calculate_distance
+    dsn = self.dataset.data_as_hash
     prev = nil
     d = 0
     nodes.each do |n|
       if prev.nil?
-        prev = NODES[n]
+        prev = dsn[n]
         next
       end
-      d += gcd(prev, NODES[n])
-      prev = NODES[n]
+      d += gcd(prev, dsn[n])
+      prev = dsn[n]
     end
     self.distance = d
   end

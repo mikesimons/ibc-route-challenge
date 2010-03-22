@@ -1,0 +1,22 @@
+<div class="span-24">
+  <h1>Submit an entry</h1>
+</div>
+<% semantic_form_for @entry, :url => { :controller => "entries", :action => "create" } do |form| %>
+  <div class="span-24">
+    <%= error_messages_for :entry %>
+  </div>
+  <div class="span-12">
+  <% form.inputs do %>
+    <%= form.input :dataset_id, :as => :hidden, :input_html => { :value => @dataset.id } %>
+    <%= form.input :name, :label => "Entry name" %>
+  <% end %>
+  </div>
+  <div class="span-11 entry">
+  <% form.inputs do %>
+    <%= form.input :entry, :input_html => { :rows => 10 } %>
+  <% end %>
+  </div>
+  <%= form.submit "All routes lead to your mum (save)" %>
+<% end %>
+<%= render :partial => "shared/map" %>
+<%= render :partial => "route_preview" %>

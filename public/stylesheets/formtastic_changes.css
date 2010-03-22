@@ -21,3 +21,15 @@ form.formtastic fieldset ol li label {
   width: 300px;
   float: none;
 }
+
+form.formtastic fieldset ol li.boolean label {
+  padding-left: 0px;
+}
+
+form.formtastic fieldset ol li.boolean label input {
+  width: auto;
+}
+
+form.formtastic fieldset {
+  display: block;
+}

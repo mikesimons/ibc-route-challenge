@@ -1,0 +1,24 @@
+<div class="span-24">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Nodes</th>
+        <th>Entries</th>
+        <th>Shortest</th>
+        <th>Open?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% Dataset.in_entry_order.all.each do |d| %>
+        <tr>
+          <td><%= link_to d.name, dataset_path(d) %></td>
+          <td><%= d.data_as_array.length %></td>
+          <td><%= d.entries.count %></td>
+          <td><%= d.entries.count > 0 ? "#{Entry.shortest.for_dataset(d).first.distance} km" : "n/a" %></td>
+          <td><%= (d.open? ? "Yep" : "Nope") %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

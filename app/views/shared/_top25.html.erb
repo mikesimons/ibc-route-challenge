@@ -1,0 +1,26 @@
+<% entries = Entry.for_dataset(@dataset).in_distance_order.all(:limit => 25) %>
+<% unless entries.empty? %>
+  <div id="top" class="span-24">
+    <h2>Top 25 entries</h2>
+    <table>
+      <thead>
+        <tr>
+        <% if @dataset.open? %><th>Show?</th><% end %>
+          <th>Name</th>
+          <th>Distance</th>
+        <% if @dataset.open? %><th>Route</th><% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% entries.each_with_index do |e, i| %>
+          <tr class="<%= cycle("darker", "") %>">
+          <% if @dataset.open? %><td style="background-color: #<%= hsv_to_rgbhex(((360 / 25.0) * i), 0.8, 1.0) %>"><%= check_box("route_#{e.id}", :sel, { :selected => e == @entry, :class => "routebox" }, e.id ) %></td><% end %>
+            <td><%= h e.name %></td>
+            <td><%= h e.distance %></td>
+          <% if @dataset.open? %><td><%= h e.nodes.map { |n| n.titlecase }.join(", ") %></td><% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

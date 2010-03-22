@@ -1,0 +1,3 @@
+var locations = {
+  <%= @dataset.data_as_array.map { |d| "'#{d[0].gsub(/'/, "\'").downcase}': { 'lat': #{d[1].to_f.to_s}, 'lon': #{d[2].to_f.to_s} }" }.join(",\n  ") %>
+};

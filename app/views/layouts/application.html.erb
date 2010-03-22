@@ -3,7 +3,8 @@
   <head>
     <title>IBuildings Challenge</title>
     <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-    <%= javascript_include_tag :defaults, "locations", "map", "selected" %>
+    <%= javascript_include_tag :defaults, "map", "selected" %>
+    <%= javascript_include_tag dataset_path(@dataset, :format => "js") if @dataset and !@dataset.new_record? %>
     <link rel="stylesheet" type="text/css" href="/stylesheets/blueprint/screen.css" media="screen, projection" />
     <link rel="stylesheet" type="text/css" href="/stylesheets/blueprint/print.css" media="print" />
     <!--[if lt IE 8]>
@@ -13,6 +14,7 @@
   </head>
   <body>
     <div id="container" class="container">
+      <%= render :partial => "shared/nav" %>
       <%= yield %>
     </div>
   </body>

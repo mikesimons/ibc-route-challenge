@@ -28,10 +28,6 @@ input {
   color: #a00;
 }
 
-#top {
-  margin-top: 20px;
-}
-
 thead th {
   padding: 5px 20px 5px 20px;
   font-size: 18px;
@@ -43,4 +39,18 @@ tbody td {
 
 .darker {
   background-color: #f0f0f0;
+}
+
+#nav ul {
+  margin-left: 0px;
+  padding-left: 0px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+#nav li {
+  font-size: 18px;
+  list-style-type: none;
+  display: inline;
+  margin-right: 40px;
 }

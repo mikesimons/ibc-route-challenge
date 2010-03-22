@@ -1,0 +1,7 @@
+<div id="nav" class="span-24">
+  <ul>
+    <%= content_tag(:li, link_to("Add entry", new_dataset_entry_path(@dataset))) if @dataset and !@dataset.new_record? %>
+    <li><%= link_to "Add dataset", new_dataset_path %></li>
+    <li><%= link_to "View datasets", datasets_path %></li>
+  </ul>
+</div>

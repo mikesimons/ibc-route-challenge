@@ -1,0 +1,14 @@
+<div class="span-24">
+  <h1>Submit a new dataset</h1>
+</div>
+<div class=span-24">
+  <%= error_messages_for :dataset %>
+  <% semantic_form_for @dataset do |form| %>
+    <% form.inputs do %>
+      <%= form.input :name %>
+      <%= form.input :data %>
+      <%= form.input :open %>
+    <% end %>
+    <%= form.submit "Submit" %>
+  <% end %>
+</div>

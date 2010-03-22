@@ -9,7 +9,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100321010220) do
+ActiveRecord::Schema.define(:version => 20100321223029) do
+
+  create_table "datasets", :force => true do |t|
+    t.string   "name"
+    t.text     "data"
+    t.boolean  "open"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "entries", :force => true do |t|
     t.text     "entry"
@@ -18,6 +26,7 @@ ActiveRecord::Schema.define(:version => 20100321010220) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "dataset_id", :null => false
   end
 
 end
